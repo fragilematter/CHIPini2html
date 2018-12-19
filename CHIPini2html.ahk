@@ -226,6 +226,9 @@ WriteNavigation(Categories, OutputFile)
   {
     Category := Categories[A_Index]
     
+    If (Category = "Remote")
+      Continue
+    
     Transform, Category, HTML, %Category%
     CategURL := StrReplace(Category, A_Space, "%20")
     
@@ -352,7 +355,10 @@ GetItems(CatName, ItemCount, Subcategories, CHIPini, OutputFile)
       IniRead, ItemBinary, %CHIPini%, %CatName%, read%A_Index%
       
     If (ItemBinary = "ERROR")
-      ItemBinary =
+      ItemBinary := ""
+      
+    If (ItemDescription = "ERROR")
+      ItemDescription := ""
       
     Transform, ItemName, HTML, %ItemName%
     Transform, ItemDescription, HTML, %ItemDescription%
@@ -362,14 +368,17 @@ GetItems(CatName, ItemCount, Subcategories, CHIPini, OutputFile)
     ItemLineTwo := ""
     If (ItemCategory <> 0) && (Subcategories[ItemCategory] <> "")
       ItemLineTwo := "<b>" . Subcategories[ItemCategory] . "</b> - "
+    
+    If (ItemDescription <> "")
+      ItemDescription := ItemDescription . "<br />"
       
-    ItemLineTwo = %ItemLineTwo%<i>%ItemDirectory%\%ItemBinary%</i>
+    ItemLineTwo := ItemLineTwo . "<i>" . ItemDirectory . "\" . ItemBinary . "</i>"
       
     FileAppend, 
 (
 `t`t`t<dl>
 `t`t`t`t<dt>%ItemName%</dt>
-`t`t`t`t<dd>%ItemDescription%<br />%ItemLineTwo%</dd>
+`t`t`t`t<dd>%ItemDescription%%ItemLineTwo%</dd>
 `t`t`t</dl>`n
 )
     , %OutputFile%.html
