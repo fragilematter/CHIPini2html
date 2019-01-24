@@ -42,6 +42,8 @@ ProcessFile(inFile)
   
   WriteDrivers(inFile, outFileTmp)
   
+  WriteExtras(inFile, outFileTmp)
+  
   WriteHTMLFooter(outFileTmp)
   
   WriteNavigation(outFileTmp, outFile)
@@ -282,6 +284,10 @@ GetItem(inFile, CategoryName, ItemIndex)
     {
       ItemPath := "/Movies" . ItemPath    
     }
+    else if (CategoryName = "Extra")
+    {
+      ItemPath := "/Extra" . ItemPath    
+    }
     
   }
   
@@ -517,6 +523,30 @@ WriteMovies(inFile, outFile)
   }
   
   If (Movies > 0)
+    FileAppend, `t`t</section><br />`n , %outFile%
+}
+
+WriteExtras(inFile, outFile)
+{
+  Extras := 0
+  ExtraHTML := ""
+  
+  IniRead, Extras, %inFile%, Main, Extra, 0
+  
+  If (Extras > 0)
+  {
+    FileAppend, `t`t<section id="Extras"><h1>Extras</h1>`n , %outFile%
+    Navigation .= "<th><a href=""#Extras"">Extras</a></th>"
+  }
+  
+  Loop, %Extras%
+  {
+    ExtraHTML := GetItem(inFile, "Extra", A_Index)
+    If (ExtraHTML <> "")
+      FileAppend, %ExtraHTML%`n , %outFile%
+  }
+  
+  If (Extras > 0)
     FileAppend, `t`t</section><br />`n , %outFile%
 }
 
