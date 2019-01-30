@@ -1,4 +1,4 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
@@ -211,7 +211,8 @@ GetItem(inFile, CategoryName, ItemIndex)
   IniRead, LaunchDate, %inFile%, %CategoryName%%ItemIndex%, Date
   
   IniRead, DescEN, %inFile%, %CategoryName%%ItemIndex%, Describe0
-  if (DescEN = "ERROR")
+  IniRead, DescRO, %inFile%, %CategoryName%%ItemIndex%, Describe6
+  if (DescEN = "ERROR") && (DescRO <> "ERROR")
   {
     IniRead, DescCZ, %inFile%, %CategoryName%%ItemIndex%, Describe1
     IniRead, DescEN, %inFile%, %CategoryName%%ItemIndex%, Describe2
