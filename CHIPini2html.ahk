@@ -1,4 +1,4 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
@@ -17,6 +17,8 @@ Loop %0%  ; For each parameter (or file dropped onto a script):
 ProcessFile(CHIPini) 
 {
   fname  := ""
+  outDir := ""
+  inName := ""
   MediaType := ""
   Categories := []
   
@@ -27,14 +29,34 @@ ProcessFile(CHIPini)
     Return
   }
   
+  HTMLtitle := fname
+  
+  SplitPath, CHIPini, inName, outDir
+  
+
+  
   IniRead, MediaType, %CHIPini%, Main, DVD, CD
   If (MediaType = 1)
     MediaType = DVD
     
   If (MediaType = 0)
+  {
     MediaType = CD
+  }
+    
+    If (inName = "Level.ini")
+  {
+    fname := outDir . "\LEVEL" . fname
+    HTMLtitle := "LEVEL " . MediaType . " " . HTMLtitle
+  }
   
-  WriteHTMLHeader(fname, MediaType)
+  If (inName = "Chip.ini")
+  {
+    fname := outDir . "\" . fname
+    HTMLtitle := "CHIP " . MediaType . " " . HTMLtitle
+  }
+  
+  WriteHTMLHeader(fname, HTMLtitle)
   
   Categories := GetCategories(CHIPini, fname)
   
@@ -48,7 +70,7 @@ ProcessFile(CHIPini)
   WriteHTMLFooter(fname)
 }
 
-WriteHTMLHeader(HTMLtitle, MediaType) 
+WriteHTMLHeader(OutFile, HTMLtitle) 
 {
   FileAppend, 
 (
@@ -57,12 +79,12 @@ WriteHTMLHeader(HTMLtitle, MediaType)
 `t<head>
 `t`t<meta charset="utf-8" />
 `t`t<meta name="generator" content="Lame AHK CHIP.ini parser by Doru Barbu - http://db.0db.ro" />
-`t`t<title>CHIP %MediaType% %HTMLtitle%</title>
+`t`t<title>%HTMLtitle%</title>
 `t</head>
 `t<body>
-`t`t<h1>CHIP %MediaType% %HTMLtitle%</h1>
+`t`t<h1>%HTMLtitle%</h1>
 `t`t<hr />`n
-), %HTMLtitle%.html
+), %OutFile%.html
   
 }
 
