@@ -46,7 +46,7 @@ ProcessFile(CHIPini)
     
     If (inName = "Level.ini")
   {
-    fname := outDir . "\LEVEL" . fname
+    fname := outDir . "\LVL" . MediaType . fname
     HTMLtitle := "LEVEL " . MediaType . " " . HTMLtitle
   }
   
