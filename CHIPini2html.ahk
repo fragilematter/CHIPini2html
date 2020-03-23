@@ -56,6 +56,8 @@ ProcessFile(CHIPini)
     HTMLtitle := "CHIP " . MediaType . " " . HTMLtitle
   }
   
+  fname := StrReplace(fname, "/", "_")
+  
   WriteHTMLHeader(fname, HTMLtitle)
   
   Categories := GetCategories(CHIPini, fname)
