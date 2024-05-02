@@ -587,14 +587,3 @@ WriteNavigation(inFile, outFile)
   
   FileDelete, %inFile%
 }
-
-; HasVal by jNizM
-; https://autohotkey.com/boards/viewtopic.php?p=109617&sid=a057c8ab901a3ab88f6304b71729c892#p109617
-HasVal(haystack, needle) {
-    for index, value in haystack
-        if (value = needle)
-            return index
-    if !(IsObject(haystack))
-        throw Exception("Bad haystack!", -1, haystack)
-    return 0
-}
